@@ -9,9 +9,9 @@ api_hash = '9e69e06dca3c31af87ca39a4bdca75aa'
 
 source_group_id =  [
     -4609257427,
-    -1002682944548,
-    -1002283197621,
-    -1003025587564
+    -1002682944548,    #xforce
+    -1002283197621,    #priority
+    
 ]
 
 #bot_token = '8478953544:AAFo_UHzc8TRoURrEiIVSh8wNcGfcddiZBI' 
