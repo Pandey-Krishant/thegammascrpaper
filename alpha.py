@@ -1,32 +1,39 @@
 import re
+import os  # Environment variables use karne ke liye
 from telethon import TelegramClient, events
+from telethon.sessions import StringSession # StringSession import kiya
 
 # === CONFIGURATION ===
+
+# NOTE: API ID aur HASH ko hum code mein rakh rahe hain, 
+# lekin STRING_SESSION ko hum ENVIRONMENT VARIABLE se uthayenge.
+
 api_id = 23846407
-
-
 api_hash = '9e69e06dca3c31af87ca39a4bdca75aa'
+
+# Railway Variables se Session String uthaya jayega
+SESSION_STRING = os.environ.get("STRING_SESSION") 
+
+# Check kiya ki session string available hai ya nahi
+if not SESSION_STRING:
+    print("FATAL ERROR: STRING_SESSION environment variable nahi mila, bro. Please Railway pe set karo.")
+    # Agar session nahi mila, toh crash kar denge taaki 'input()' error na aaye
+    exit(1) 
 
 source_group_id =  [
     -4609257427,
-    -1002682944548,    #xforce
-    -1002283197621,    #priority
-    
+    -1002682944548,    # xforce
+    -1002283197621,    # priority
 ]
 
-#bot_token = '8478953544:AAFo_UHzc8TRoURrEiIVSh8wNcGfcddiZBI' 
-
-#target_peer = '@gammachk'
 target_group_id = 1003146202628
 
-client = TelegramClient('forwarder_session', api_id, api_hash)
+# Client ko StringSession use karke initialize kiya
+# 'forwarder_session' bas naam hai, file ab nahi banegi
+client = TelegramClient(StringSession(SESSION_STRING), api_id, api_hash)
 
-"""target_peers = [
-    '@APNA_FIRST_TARGET_USERNAME',  # Example Target 1 (Checker)
-    '@APNA_SECOND_TARGET_USERNAME', # Example Target 2 (Backup)
-    '@THIRD_TARGET_USERNAME',       # Example Target 3 (Private)
-]"""
-# === PATTERNS TO MATCH ===
+
+# === CARD EXTRACTION FUNCTION (Jaisa tumne diya tha) ===
 card_patterns = [
     r'(\d{13,16})[| ]+(\d{1,2})[\/| ]+(\d{2,4})[| ]+(\d{3,4})',
     r'(\d{13,16})\s+(\d{1,2})/(\d{2,4})\s+(\d{3,4})',
@@ -78,13 +85,13 @@ async def handler(event):
     msg = event.raw_text
     formatted = extract_card(msg)
     if formatted:
-        #await client.send_message(target_peer, formatted)
         await client.send_message(target_group_id, formatted)
         print(f"Forwarded: {formatted}")
 
 # === START THE CLIENT ===
-#client.start()
-client.start() 
 
-print("Bot is running and scanning for card formats...")
-client.run_until_disconnected()
+# client.start() aur client.run_until_disconnected() ko 'with client:' block mein wrap kiya
+# Taaki connection sahi se manage ho aur koi hanging issue na aaye.
+with client:
+    print("Bot is running and scanning for card formats...")
+    client.run_until_disconnected()
