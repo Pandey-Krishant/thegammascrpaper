@@ -26,7 +26,7 @@ source_group_id =  [
     -1002283197621,    # priority
 ]
 
-target_group_id = 1003146202628
+target_group_id = -1003146202628
 
 # Client ko StringSession use karke initialize kiya
 # 'forwarder_session' bas naam hai, file ab nahi banegi
