@@ -6,7 +6,7 @@ from telethon.sessions import StringSession
 # === CONFIGURATION (SAB KUCH RAILWAY VARIABLES SE UTHTHA HAI) ===
 try:
     # 1. API Credentials (Ye same reh sakte hain, ya alag bhi de sakte ho)
-    API_ID = int(os.environ.get("API_ID"))
+    API_ID = 23846407
     API_HASH = '9e69e06dca3c31af87ca39a4bdca75aa'
     
     # 2. STRING SESSION (Is Service ke liye ALAG Session String chahiye!)
